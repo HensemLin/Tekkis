@@ -7,7 +7,7 @@ from .routers import *
 
 db_models.Base.metadata.create_all(bind=engine)
 
-# initialize_table_data()
+initialize_table_data()
 
 app = FastAPI()
 

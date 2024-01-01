@@ -29,7 +29,7 @@ def car_exists(car_general, db: Session = SessionLocal()):
         return True
     return False
 
-def initialize_table_data(db: Session = SessionLocal()):
+def initialize_table_data(url: str, limit: int = 50, db: Session = SessionLocal()):
     """
     Initialize data in the 'Company' and 'Source' tables.
 
@@ -42,7 +42,7 @@ def initialize_table_data(db: Session = SessionLocal()):
     try:
         """Initialize data for the 'Shop' and 'ShopLocation' table"""
         print("Initializing....")
-        car_details = WebScraper(url="https://www.mudah.my/malaysia/cars-for-sale").scrap_all_cars(limit=50)
+        car_details = WebScraper(url=url).scrap_all_cars(limit=limit)
         for car in car_details:
             """Add the car details into database"""
             car_general = car.get('GENERAL', {})

@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from .database import db_models
 from .database.db_setup import engine
@@ -7,9 +8,17 @@ from .routers import *
 
 db_models.Base.metadata.create_all(bind=engine)
 
-initialize_table_data()
+@asynccontextmanager
+async def app_lifespan(app: FastAPI):
+    # code to execute when app is loading
+    url = "https://www.mudah.my/malaysia/cars-for-sale"
+    print(f"Initializing app: scrapping data from {url}")
+    initialize_table_data(url=url, limit=50)
+    yield
+    # code to execute when app is shutting down
+    print("shutdown application")
 
-app = FastAPI()
+app = FastAPI(lifespan=app_lifespan)
 
 origins = ["*"]
 
